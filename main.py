@@ -2,28 +2,36 @@ import pygame
 import os
 from botao import Button
 
-# configs
-pygame.init()
 
-HEIGHT = 500
-WIDTH = 800
+def load_config():
+    height = 500
+    width = 800
 
-FPS = 30
+    fps = 30
 
-SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Dino")
+    config = dict()
+    config['height'] = height
+    config['width'] = width
+    config['fps'] = fps
+    return config
 
-CLOCK = pygame.time.Clock()
+
+def create_screen():
+    config = load_config()
+    width = config['width']
+    height = config['height']
+    screen = pygame.display.set_mode((width, height))
+    return screen
 
 
-def load_button_config(screen_height, screen_width):
+def load_button_config(window_height, window_width):
     # botton config
     color = (255, 153, 153)
     outline_color = (0, 0, 0)
     width_button = 250
     height_button = 70
-    button_x = (screen_width / 2) - (width_button / 2)
-    button_y = (screen_height / 2)
+    button_x = (window_width / 2) - (width_button / 2)
+    button_y = (window_height / 2)
     # place config in a dict
     button_config = dict()
     button_config['color'] = color
@@ -35,9 +43,9 @@ def load_button_config(screen_height, screen_width):
     return button_config
 
 
-def create_buttons(screen_height, screen_width):
+def create_buttons(window_height, window_width):
     # load botton config
-    button_config = load_button_config(screen_height=screen_height, screen_width=screen_width)
+    button_config = load_button_config(window_height=window_height, window_width=window_width)
 
     # create the buttons
     player_button_option = Button(color=button_config['color'], x=button_config['button_x'],
@@ -62,25 +70,30 @@ def create_buttons(screen_height, screen_width):
     return buttons
 
 
-def draw_screen(screen, bg, buttons):
+def draw_window(window, bg, buttons):
     pygame.display.update()
-    screen.blit(bg, (0, 0))
-    buttons['player'].draw(win=screen)
-    buttons['ai'].draw(win=screen)
-    buttons['player_vs_ai'].draw(win=screen)
+    window.blit(bg, (0, 0))
+    buttons['player'].draw(win=window)
+    buttons['ai'].draw(win=window)
+    buttons['player_vs_ai'].draw(win=window)
 
 
-def menu_loop(screen):
+def menu_loop(window):
+    # load configs
+    configs = load_config()
     # load Background
     bg = pygame.image.load(os.path.join('imgs', 'bg_800_500.jpg'))
     # load bottons
-    buttons = create_buttons(screen_height=HEIGHT, screen_width=WIDTH)
+    width = configs['width']
+    height = configs['height']
+    buttons = create_buttons(window_height=height, window_width=width)
 
     menu_running = True
     while menu_running:
-        CLOCK.tick(FPS)
+        fps = configs['fps']
+        CLOCK.tick(fps)
         # draw screen
-        draw_screen(screen=screen, bg=bg, buttons=buttons)
+        draw_window(window=window, bg=bg, buttons=buttons)
 
         # User interaction
         for event in pygame.event.get():
@@ -104,4 +117,12 @@ def menu_loop(screen):
 
 
 if __name__ == "__main__":
-    menu_loop(screen=SCREEN)
+    # configs
+    pygame.init()
+    pygame.display.set_caption("Dino Menu")
+
+    WINDOW = create_screen()
+
+    CLOCK = pygame.time.Clock()
+
+    menu_loop(window=WINDOW)
