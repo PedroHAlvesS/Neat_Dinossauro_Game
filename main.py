@@ -1,6 +1,6 @@
 import pygame
 import os
-from botao import Button
+from button import Button
 
 
 def load_config():
@@ -27,7 +27,7 @@ def create_screen():
 def load_button_config(window_height, window_width):
     # botton config
     color = (255, 153, 153)
-    outline_color = (0, 0, 0)
+    outline_color = (0, 0, 0) # black RGB
     width_button = 250
     height_button = 70
     button_x = (window_width / 2) - (width_button / 2)
@@ -82,7 +82,7 @@ def menu_loop(window):
     # load configs
     configs = load_config()
     # load Background
-    bg = pygame.image.load(os.path.join('imgs', 'bg_800_500.jpg'))
+    bg = pygame.image.load(os.path.join('imgs', 'menu.jpg'))
     # load bottons
     width = configs['width']
     height = configs['height']
